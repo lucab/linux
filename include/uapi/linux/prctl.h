@@ -272,4 +272,7 @@ struct prctl_mm_map {
 # define PR_SCHED_CORE_SCOPE_THREAD_GROUP	1
 # define PR_SCHED_CORE_SCOPE_PROCESS_GROUP	2
 
+/* Retrieve total number of threads in the process */
+#define PR_GET_NR_THREADS		63
+
 #endif /* _LINUX_PRCTL_H */

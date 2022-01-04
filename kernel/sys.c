@@ -2230,6 +2230,17 @@ static int prctl_get_tid_address(struct task_struct *me, int __user * __user *ti
 }
 #endif
 
+static int prctl_get_nr_threads(struct task_struct *me, unsigned int __user *dest)
+{
+	unsigned int threads_count;
+
+	int nr_threads = get_nr_threads(me);
+	WARN_ON(nr_threads < 1);
+	threads_count = max(1, nr_threads);
+
+	return put_user(threads_count, dest);
+}
+
 static int propagate_has_child_subreaper(struct task_struct *p, void *data)
 {
 	/*
@@ -2530,6 +2541,9 @@ SYSCALL_DEFINE5(prctl, int, option, unsigned long, arg2, unsigned long, arg3,
 		error = sched_core_share_pid(arg2, arg3, arg4, arg5);
 		break;
 #endif
+	case PR_GET_NR_THREADS:
+		error = prctl_get_nr_threads(me, (unsigned int __user *)arg2);
+		break;
 	default:
 		error = -EINVAL;
 		break;
